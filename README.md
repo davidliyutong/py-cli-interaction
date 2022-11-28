@@ -1,5 +1,8 @@
 # Python CLI Interaction Library
 
+![Upload Python Package](https://github.com/davidliyutong/py-cli-interaction/workflows/Upload%20Python%20Package/badge.svg)
+[![Pypi](https://img.shields.io/pypi/v/py-cli-interaction.svg)](https://pypi.org/project/py-cli-interaction/)
+
 ## Introduction
 
 This library is created for simplify `INPUT`/`OUTPUT` procedure when generating `YAML`/`JSON` configurations for daemon services.
