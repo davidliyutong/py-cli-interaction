@@ -1,7 +1,7 @@
-
+import os
 from setuptools import setup
 
-requirements = open("./requirements.txt","r").readlines()
+requires = open("./requirements.txt","r").readlines() if os.path.exists("./requirements.txt") else open("./py_cli_interaction.egg-info/requires.txt","r").readlines()
 
 setup(name="py-cli-interaction",
       version="0.1",
@@ -13,4 +13,4 @@ setup(name="py-cli-interaction",
       license="MIT Licence",
       packages=["py_cli_interaction"],
       python_requires=">=3.7",
-      install_requires=requirements)
+      install_requires=requires)
