@@ -13,4 +13,5 @@ setup(name="py-cli-interaction",
       license="MIT Licence",
       packages=["py_cli_interaction"],
       python_requires=">=3.7",
-      install_requires=requires)
+      install_requires=requires,
+      long_description_content_type="text/markdown")
