@@ -38,7 +38,8 @@ def parse_cli_bool(msg: str,
                    default_value: bool = None) -> Tuple[Optional[bool], Optional[Exception]]:
     console = Console()
     string_input = console.input(
-        " > " + msg + f" [ {'Y' if default_value == True else 'y'}/{'N' if default_value == False else 'n'} ]:"
+        " > " + msg +
+        f" [ {'Y' if default_value == True else 'y'}/{'N' if default_value == False else 'n'} ]:"
     )
     if string_input in ['Y', 'y', 'yes']:
         return True, None
@@ -58,7 +59,8 @@ def must_parse_cli_bool(msg: str,
     console = Console()
     while True:
         string_input = console.input(
-            " > " + msg + f" [ {'Y' if default_value == True else 'y'}/{'N' if default_value == False else 'n'} ]:"
+            " > " + msg +
+            f" [ {'Y' if default_value == True else 'y'}/{'N' if default_value == False else 'n'} ]:"
         )
         if string_input in ['Y', 'y', 'yes']:
             return True
@@ -89,7 +91,7 @@ def parse_cli_int(msg: str,
     else:
         try:
             sel = int(string_input)
-            if (min is not None and max is not None) and (sel < min or sel >= max):
+            if (min is not None and max is not None) and (sel < min or sel > max):
                 return None, ValueError(f"{sel} is out of range")
             else:
                 return sel, None
@@ -117,7 +119,7 @@ def must_parse_cli_int(msg: str,
         else:
             try:
                 sel = int(string_input)
-                if (min is not None and max is not None) and (sel < min or sel >= max):
+                if (min is not None and max is not None) and (sel < min or sel > max):
                     console.log(f"{sel} is out of range")
                     continue
                 else:
@@ -126,6 +128,61 @@ def must_parse_cli_int(msg: str,
                 console.log(f"input {string_input} is invalid")
                 continue
 
+
+def parse_cli_float(msg: str,
+                    min: float = None,
+                    max: float = None,
+                    default_value: float = None) -> Tuple[Optional[int], Optional[Exception]]:
+    console = Console()
+
+    string_input = console.input(
+        " > " +
+        msg +
+        f" [ default={default_value} ]:"
+    )
+
+    if string_input == '' and default_value is not None:
+        sel = default_value
+        return sel, None
+    else:
+        try:
+            sel = float(string_input)
+            if (min is not None and max is not None) and (sel < min or sel > max):
+                return None, ValueError(f"{sel} is out of range")
+            else:
+                return sel, None
+
+        except Exception as e:
+            return None, e
+
+
+def must_parse_cli_float(msg: str,
+                         min: float = None,
+                         max: float = None,
+                         default_value: float = None) -> int:
+    console = Console()
+
+    while True:
+        string_input = console.input(
+            " > " +
+            msg +
+            f" [  default={default_value} ]:"
+        )
+
+        if string_input == '' and default_value is not None:
+            sel = default_value
+            return sel
+        else:
+            try:
+                sel = float(string_input)
+                if (min is not None and max is not None) and (sel < min or sel > max):
+                    console.log(f"{sel} is out of range")
+                    continue
+                else:
+                    return sel
+            except Exception as e:
+                console.log(f"input {string_input} is invalid")
+                continue
 
 
 def parse_cli_sel(msg: str,
@@ -155,7 +212,7 @@ def parse_cli_sel(msg: str,
         except Exception as e:
             return None, e
 
-        if sel < min or sel >= max:
+        if sel < min or sel > max:
             return None, ValueError(f"{sel} is out of range")
 
         return sel, None
@@ -187,7 +244,7 @@ def must_parse_cli_sel(msg: str,
                 console.log(f"input {string_input} is invalid")
                 continue
 
-        if sel < min or sel >= max:
+        if sel < min or sel > max:
             console.log(f"{sel} is out of range")
             continue
 
