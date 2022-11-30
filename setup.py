@@ -4,7 +4,7 @@ from setuptools import setup
 requires = open("./requirements.txt","r").readlines() if os.path.exists("./requirements.txt") else open("./py_cli_interaction.egg-info/requires.txt","r").readlines()
 
 setup(name="py-cli-interaction",
-      version="0.1",
+      version="0.2",
       author="davidliyutong",
       keywords=["python", "CLI", "interaction"],
       author_email="davidliyutong@sjtu.edu.cn",
