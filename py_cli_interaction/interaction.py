@@ -13,7 +13,7 @@ def parse_cli_string(msg, default_value: str = None) -> Tuple[Optional[str], Opt
         if default_value is not None:
             return default_value, None
         else:
-            return None, ValueError(f"Empty input")
+            return None, ValueError(f"empty input")
     else:
         return string_input, None
 
@@ -21,17 +21,11 @@ def parse_cli_string(msg, default_value: str = None) -> Tuple[Optional[str], Opt
 def must_parse_cli_string(msg: str, default_value: str = None) -> str:
     console = Console()
     while True:
-        string_input = console.input(
-            " > " + msg + f" [ default={default_value} ]:"
-        )
-
-        if string_input == '':
-            if default_value is not None:
-                return default_value
-            else:
-                console.log("Empty input")
+        ret, err = parse_cli_string(msg, default_value)
+        if err is None:
+            return ret
         else:
-            return string_input
+            console.log(err)
 
 
 def parse_cli_bool(msg: str,
@@ -58,19 +52,11 @@ def must_parse_cli_bool(msg: str,
                         default_value: bool = None) -> bool:
     console = Console()
     while True:
-        string_input = console.input(
-            " > " + msg +
-            f" [ {'Y' if default_value == True else 'y'}/{'N' if default_value == False else 'n'} ]:"
-        )
-        if string_input in ['Y', 'y', 'yes']:
-            return True
-        elif string_input in ['N', 'n', 'no']:
-            return False
-        elif string_input == '':
-            if default_value is not None:
-                return default_value
-
-        console.log("Wrong Input")
+        ret, err = parse_cli_bool(msg, default_value)
+        if err is None:
+            return ret
+        else:
+            console.log(err)
 
 
 def parse_cli_int(msg: str,
@@ -105,28 +91,12 @@ def must_parse_cli_int(msg: str,
                        max: int = None,
                        default_value: int = None) -> int:
     console = Console()
-
     while True:
-        string_input = console.input(
-            " > " +
-            msg +
-            f" [  default={default_value} ]:"
-        )
-
-        if string_input == '' and default_value is not None:
-            sel = default_value
-            return sel
+        ret, err = parse_cli_int(msg, min, max, default_value)
+        if err is None:
+            return ret
         else:
-            try:
-                sel = int(string_input)
-                if (min is not None and max is not None) and (sel < min or sel > max):
-                    console.log(f"{sel} is out of range")
-                    continue
-                else:
-                    return sel
-            except Exception as e:
-                console.log(f"input {string_input} is invalid")
-                continue
+            console.log(err)
 
 
 def parse_cli_float(msg: str,
@@ -161,28 +131,12 @@ def must_parse_cli_float(msg: str,
                          max: float = None,
                          default_value: float = None) -> int:
     console = Console()
-
     while True:
-        string_input = console.input(
-            " > " +
-            msg +
-            f" [  default={default_value} ]:"
-        )
-
-        if string_input == '' and default_value is not None:
-            sel = default_value
-            return sel
+        ret, err = parse_cli_float(msg, min, max, default_value)
+        if err is None:
+            return ret
         else:
-            try:
-                sel = float(string_input)
-                if (min is not None and max is not None) and (sel < min or sel > max):
-                    console.log(f"{sel} is out of range")
-                    continue
-                else:
-                    return sel
-            except Exception as e:
-                console.log(f"input {string_input} is invalid")
-                continue
+            console.log(err)
 
 
 def parse_cli_sel(msg: str,
@@ -193,13 +147,13 @@ def parse_cli_sel(msg: str,
     console = Console()
 
     if max is None:
-        max = len(candidates)
+        max = len(candidates) + min - 1
 
     string_input = console.input(
         " > " +
         msg +
         f" [ {min}-{max}, default={default_value} ]:\n" +
-        "\n".join(["\t" + str(idx) + " - " + str(item) for idx, item in enumerate(candidates)]) +
+        "\n".join(["\t" + str(idx + min) + " - " + str(item) for idx, item in enumerate(candidates)]) +
         "\n > "
     )
 
@@ -224,28 +178,9 @@ def must_parse_cli_sel(msg: str,
                        max: int = None,
                        default_value: int = None) -> int:
     console = Console()
-    if max is None:
-        max = len(candidates)
     while True:
-        string_input = console.input(
-            " > " +
-            msg +
-            f" [ {min}-{max}, default={default_value} ]:\n" +
-            "\n".join(["\t" + str(idx) + " - " + str(item) for idx, item in enumerate(candidates)]) +
-            "\n > "
-        )
-
-        if string_input == '' and default_value is not None:
-            sel = default_value
+        ret, err = parse_cli_sel(msg, candidates, min, max, default_value)
+        if err is None:
+            return ret
         else:
-            try:
-                sel = int(string_input)
-            except Exception as e:
-                console.log(f"input {string_input} is invalid")
-                continue
-
-        if sel < min or sel > max:
-            console.log(f"{sel} is out of range")
-            continue
-
-        return sel
+            console.log(err)
